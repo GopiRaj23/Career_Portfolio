@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gopinath Elangovan | Strategic Program Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --neon-blue: #00f2ff;
+            --neon-orange: #ff512f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .slides-container { height: 100vh; width: 100vw; overflow-y: scroll; scroll-snap-type: y mandatory; }
+        .slide { min-height: 100vh; width: 100vw; scroll-snap-align: start; display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: 2rem; }
+
+        /* Background Effects */
+        .bg-blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; z-index: 0; animation: float 10s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(20px, -20px); } }
+
+        /* Glass Card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 24px;
+            padding: 2rem;
+            z-index: 10;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            width: 95%; max-width: 1400px; position: relative;
+        }
+
+        h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
+        
+        /* Gradient H2 for all slides */
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-align: center;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* =========================================
+           SLIDE 2: THE CAREER (Horizontal)
+           ========================================= */
+        
+        .trajectory-wrapper {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            margin-top: 5rem;
+            pointer-events: none; 
+        }
+
+        /* SMART VISIBILITY LOGIC */
+        .node-wrapper { 
+            opacity: 1; 
+            transition: opacity 0.3s ease, filter 0.3s ease; 
+            pointer-events: auto; 
+        }
+        .trajectory-wrapper:hover .node-wrapper { opacity: 0.2; filter: blur(2px); }
+        .trajectory-wrapper .node-wrapper:hover { opacity: 1; filter: blur(0); z-index: 50; transform: translate(-50%, -50%) scale(1.1); }
+
+        /* Phase Headers */
+        .phase-bar { position: absolute; top: -70px; left: 0; width: 100%; display: flex; justify-content: space-between; }
+        .phase-item { display: flex; flex-direction: column; align-items: center; padding: 10px; text-align: center; }
+        .phase-num { font-size: 0.9rem; font-weight: 800; color: #fff; margin-bottom: 4px; }
+        .phase-desc { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .ph-1 { width: 20%; border-bottom: 2px solid var(--neon-blue); background: linear-gradient(0deg, rgba(0, 242, 255, 0.05), transparent); padding-bottom: 20px; }
+        .ph-2 { width: 25%; border-bottom: 2px solid #3EC1D5; background: linear-gradient(0deg, rgba(62, 193, 213, 0.05), transparent); padding-bottom: 20px; }
+        .ph-3 { width: 25%; border-bottom: 2px solid #79ba6e; background: linear-gradient(0deg, rgba(121, 186, 110, 0.05), transparent); padding-bottom: 20px; }
+        .ph-4 { width: 30%; border-bottom: 2px solid var(--neon-orange); background: linear-gradient(0deg, rgba(255, 81, 47, 0.05), transparent); padding-bottom: 20px; }
+
+        .trajectory-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+        .path-glow { fill: none; stroke: url(#neonGradient); stroke-width: 12; filter: blur(10px); opacity: 0.5; stroke-linecap: round; }
+        .path-line { fill: none; stroke: url(#neonGradient); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 8, 12; }
+
+        .node-wrapper {
+            position: absolute; transform: translate(-50%, -50%); z-index: 20;
+            display: flex; flex-direction: column; align-items: center; cursor: pointer;
+        }
+
+        /* Logos */
+        .logo-circle {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+            background: #0f172a;
+            border: 2px solid;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-text { font-weight: 900; font-size: 0.8rem; line-height: 1; text-align: center; color: #fff; }
+
+        /* Gradient Rule Colors */
+        #node-1 .logo-circle { border-color: #00f2ff; box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+        #node-2 .logo-circle { border-color: #3EC1D5; box-shadow: 0 0 15px rgba(62, 193, 213, 0.3); }
+        #node-3 .logo-circle { border-color: #79ba6e; box-shadow: 0 0 15px rgba(121, 186, 110, 0.3); }
+        #node-4 .logo-circle { border-color: #ff512f; box-shadow: 0 0 15px rgba(255, 81, 47, 0.3); }
+
+        #node-1:hover .logo-circle { box-shadow: 0 0 35px #00f2ff; }
+        #node-2:hover .logo-circle { box-shadow: 0 0 35px #3EC1D5; }
+        #node-3:hover .logo-circle { box-shadow: 0 0 35px #79ba6e; }
+        #node-4:hover .logo-circle { box-shadow: 0 0 35px #ff512f; }
+
+        .node-label { margin-top: 15px; background: rgba(0,0,0,0.8); padding: 6px 12px; border-radius: 4px; text-align: center; border: 1px solid rgba(255,255,255,0.15); white-space: nowrap; }
+        .role-title { display: block; font-weight: bold; color: #fff; font-size: 0.85rem;}
+
+        /* Pop-up Cards */
+        .pop-card { position: absolute; width: 480px; background: var(--card-bg); border-radius: 12px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: left; }
+        .pop-card-inner { position: relative; background: var(--card-bg); margin: 2px; border-radius: 10px; padding: 20px; z-index: 2; }
+        .pop-card::before { content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, var(--neon-blue), transparent); animation: rotate 4s linear infinite; z-index: 1; }
+        #node-4 .pop-card::before { background: conic-gradient(transparent, transparent, var(--neon-orange), transparent); }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+        .pop-card h4 { color: var(--neon-blue); margin-bottom: 4px; border-bottom: none; }
+        #node-4 .pop-card h4 { color: var(--neon-orange); }
+        .tenure-badge { display: inline-block; font-size: 0.75rem; color: #000; background: #fff; padding: 2px 8px; border-radius: 4px; margin-bottom: 12px; font-weight: 700; }
+        .pop-card ul { list-style: none; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
+        .pop-card li { position: relative; padding-left: 15px; margin-bottom: 6px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
+        .pop-card li::before { content: "›"; position: absolute; left: 0; color: var(--neon-orange); font-weight: bold; font-size: 1.2rem; line-height: 1rem; }
+        .node-wrapper:hover .pop-card { opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto; }
+
+        #node-1 { left: 10%; top: 25%; } #node-1 .pop-card { top: 90px; left: -20px; }
+        #node-2 { left: 32.5%; top: 25%; } #node-2 .pop-card { top: 90px; left: -100px; }
+        #node-3 { left: 57.5%; top: 25%; } #node-3 .pop-card { top: 90px; left: -200px; }
+        #node-4 { left: 85%; top: 25%; } #node-4 .pop-card { top: 90px; right: -20px; }
+
+        /* =========================================
+           SLIDE 3: THE ARSENAL
+           ========================================= */
+        .skills-container { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem; }
+        .skill-tag { padding: 0.8rem 1.5rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; font-weight: 500; }
+        
+        /* Common Classes */
+        .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem; }
+        .edu-card { background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 16px; border-left: 4px solid #fff; }
+
+        @media (max-width: 1024px) {
+            .trajectory-wrapper { height: auto; display: flex; flex-direction: column; gap: 2rem; margin-left: 1rem; border-left: 2px dashed var(--neon-blue); padding-left: 2rem; margin-top: 2rem; pointer-events: auto; }
+            .trajectory-svg, .phase-bar { display: none; }
+            .node-wrapper { position: relative; left: 0 !important; top: 0 !important; transform: none; align-items: flex-start; width: 100%; margin-bottom: 1rem; opacity: 1 !important; filter: none !important; }
+            .pop-card { position: relative; opacity: 1; visibility: visible; transform: none; width: 100%; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; margin-top: 1rem; box-shadow: none; }
+            .pop-card::before { display: none; }
+            .logo-circle { width: 50px; height: 50px; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="slides-container">
+
+    <div class="slide">
+        <div class="bg-blob" style="width: 500px; height: 500px; background: #0575E6; top: -100px; left: -100px;"></div>
+        <div class="glass-card" style="text-align: center; padding: 5rem 2rem;">
+            <span style="display: inline-block; padding: 0.5rem 1.5rem; border-radius: 50px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.9rem;">PMP® Certified Professional</span>
+            <h1>Gopinath Elangovan</h1>
+            <h3 style="color: #cbd5e1; font-weight: 300; margin-bottom: 2rem;">Defining Strategy. Orchestrating Execution. Delivering Growth.</h3>
+            
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #00f260;">8+</div>
+                    <div style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Years Exp</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #1CD8D2;">€5 Mn+</div>
+                    <div style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Project Budgets</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; color: #FF512F;">3</div>
+                    <div style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Global Sectors</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide" style="align-items: flex-start; padding-top: 5vh;">
+        <div class="glass-card">
+            <h2>THE CAREER</h2>
+            
+            <div class="trajectory-wrapper">
+                
+                <div class="phase-bar">
+                    <div class="phase-item ph-1"><div class="phase-num">PHASE 1</div><div class="phase-desc">Industrialization &<br>Process Optimization</div></div>
+                    <div class="phase-item ph-2"><div class="phase-num">PHASE 2</div><div class="phase-desc">Global<br>NPI Execution</div></div>
+                    <div class="phase-item ph-3"><div class="phase-num">PHASE 3</div><div class="phase-desc">Digital Transformation<br>& PMO Governance</div></div>
+                    <div class="phase-item ph-4"><div class="phase-num">PHASE 4</div><div class="phase-desc">Strategic<br>Initiative Driving</div></div>
+                </div>
+
+                <svg class="trajectory-svg" viewBox="0 0 1000 600" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="neonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color: var(--neon-blue); stop-opacity:1" />
+                            <stop offset="100%" style="stop-color: var(--neon-orange); stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M 100,150 L 850,150" class="path-glow" />
+                    <path d="M 100,150 L 850,150" class="path-line" />
+                </svg>
+
+                <div class="node-wrapper" id="node-1">
+                    <div class="logo-circle"><div class="logo-text">TVS</div></div>
+                    <div class="node-label"><span class="role-title">Associate PM</span></div>
+                    <div class="pop-card">
+                        <div class="pop-card-inner">
+                            <h4>TVS Sundaram Clayton (NPD)</h4>
+                            <div class="tenure-badge">Jul'17 - Aug'20</div>
+                            <ul>
+                                <li><strong>Process & Governance:</strong> Partnered with NPI VP to carve out NPD function & establish governance X-Matrix.</li>
+                                <li><strong>Capex Mgmt:</strong> Secured <strong>₹20 Cr+</strong> investment for new machining cells with validated profitability.</li>
+                                <li><strong>Efficiency:</strong> Improved line efficiency by <strong>~25%</strong> via Value Stream Mapping & bottleneck removal.</li>
+                                <li><strong>Quality:</strong> Executed APQP/PPAP achieving Zero Major NCs in audits (Kia, Ford, Hyundai).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="node-wrapper" id="node-2">
+                    <div class="logo-circle"><div class="logo-text">ZF</div></div>
+                    <div class="node-label"><span class="role-title">Project Manager</span></div>
+                    <div class="pop-card">
+                        <div class="pop-card-inner">
+                            <h4>ZF Wind Power (NPI)</h4>
+                            <div class="tenure-badge">Jan'21 - Dec'22</div>
+                            <ul>
+                                <li><strong>Global Delivery:</strong> Delivered 3MW & 6MW gearbox platforms on-time within <strong>€5 Mn</strong> budget & QCD targets.</li>
+                                <li><strong>Leadership:</strong> Led 8-member cross-national teams (EU, China, India) ensuring stakeholder alignment.</li>
+                                <li><strong>Risk Mgmt:</strong> Mitigated schedule risks via rigorous Gate Reviews & Change Management protocols.</li>
+                                <li><strong>Visibility:</strong> Designed Power BI "New Projects Overview" enhancing global tracking.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="node-wrapper" id="node-3">
+                    <div class="logo-circle"><div class="logo-text">ZF</div></div>
+                    <div class="node-label"><span class="role-title">Project Management Officer</span></div>
+                    <div class="pop-card">
+                        <div class="pop-card-inner">
+                            <h4>ZF Wind Power (PMO)</h4>
+                            <div class="tenure-badge">Jan'23 - Sep'24</div>
+                            <ul>
+                                <li><strong>Strategy:</strong> Defined division-level PMO strategy for the Business Unit during an onsite at Belgium.</li>
+                                <li><strong>Digital Tx:</strong> Drove an enterprise digitalization initiative of PM software introduction across 4 countries; launched SharePoint Hub.</li>
+                                <li><strong>Optimization:</strong> Built Global Capacity Dashboards & Interactive Digital PDP, cutting training time by <strong>~40%</strong>.</li>
+                                <li><strong>Governance:</strong> Chaired Steering Committees with CxOs ensuring 100% process compliance.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="node-wrapper" id="node-4">
+                    <div class="logo-circle"><div class="logo-text">D</div></div>
+                    <div class="node-label"><span class="role-title">Program Manager & Executive Assistant to CEO</span></div>
+                    <div class="pop-card">
+                        <div class="pop-card-inner">
+                            <h4>Dhaksha Unmanned Systems (CEO Office)</h4>
+                            <div class="tenure-badge">Sep'24 - Today</div>
+                            <ul>
+                                <li><strong>Strategic Growth:</strong> Leading cloud drone platform dev (AWS IoT/Edge) & forged 3 global R&D alliances.</li>
+                                <li><strong>Defence Programs:</strong> Spearheading <strong>₹250 Cr+</strong> defence projects (DRDO, Army) from RFP to delivery.</li>
+                                <li><strong>PMO Setup:</strong> Established the PMO from scratch, scaling governance within 12 months.</li>
+                                <li><strong>Automation:</strong> Deployed Power BI, Power Automate reports reducing executive reporting effort by <strong>60%</strong>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="glass-card" style="text-align: center;">
+            <h2>The Arsenal</h2>
+            <p>Tools & Competencies driving success.</p>
+
+            <h3 style="margin-top: 2rem;">Software & Tools</h3>
+            <div class="skills-container">
+                <div class="skill-tag">Power BI</div>
+                <div class="skill-tag">MS Project</div>
+                <div class="skill-tag">SAP</div>
+                <div class="skill-tag">Jira</div>
+                <div class="skill-tag">Power Automate</div>
+                <div class="skill-tag">Windchill</div>
+                <div class="skill-tag">Minitab</div>
+                <div class="skill-tag">Visio</div>
+            </div>
+
+            <h3 style="margin-top: 2rem;">Core Competencies</h3>
+            <div class="skills-container">
+                <div class="skill-tag">PMO Setup</div>
+                <div class="skill-tag">Strategic Planning</div>
+                <div class="skill-tag">Digital Transformation</div>
+                <div class="skill-tag">Stakeholder Mgmt</div>
+                <div class="skill-tag">Risk Governance</div>
+                <div class="skill-tag">Cross-border Alliances</div>
+                </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="glass-card">
+            <h2 style="text-align: center;">Education & Certifications</h2>
+            <div class="edu-grid">
+                <div class="edu-card">
+                    <h3 style="color: #fff;">🎓 Education</h3>
+                    <div style="margin-bottom: 1.5rem;">
+                        <strong>M.Tech in Manufacturing Management (2021)</strong><br>
+                        <span style="color: var(--text-secondary);">BITS Pilani</span>
+                    </div>
+                    <div>
+                        <strong>B.E in Mechanical Engineering (2017)</strong><br>
+                        <span style="color: var(--text-secondary);">Sri Eshwar College of Engg (Anna University)</span>
+                    </div>
+                </div>
+
+                <div class="edu-card" style="border-left-color: #00f260;">
+                    <h3 style="color: #fff;">📜 Certifications</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>PMP® (Project Management Professional)</strong><br>
+                        <span style="color: var(--text-secondary);">PMI (ID: 3636781)</span>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Six Sigma Yellow Belt</strong><br>
+                        <span style="color: var(--text-secondary);">GIITR</span>
+                    </div>
+                    <div>
+                        <strong>PPAP & FMEA</strong><br>
+                        <span style="color: var(--text-secondary);">OMNEX Inc.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="glass-card" style="text-align: center; padding: 6rem 2rem;">
+            <h1>Let's Connect!</h1>
+            <p style="font-size: 1.5rem; margin-bottom: 3rem;">Reach me</p>
+            <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+                <a href="mailto:gopyas@gmail.com" style="text-decoration: none;">
+                    <div class="skill-tag" style="background: #fff; color: #000; font-size: 1.2rem;">
+                        ✉️ gopyas@gmail.com
+                    </div>
+                </a>
+                <a href="https://www.linkedin.com/in/gopiraj23/" target="_blank" style="text-decoration: none;">
+                    <div class="skill-tag" style="background: #0077b5; color: #fff; font-size: 1.2rem; border: none;">
+                        in /gopiraj23
+                    </div>
+                </a>
+                <a href="https://wa.me/918903721238" target="_blank" style="text-decoration: none;">
+                    <div class="skill-tag" style="background: #25D366; color: #fff; font-size: 1.2rem; border: none;">
+                        <i class="fab fa-whatsapp"></i> +91 89037 21238
+                    </div>
+                </a>
+                <a href="tel:+919791934072" style="text-decoration: none;">
+                    <div class="skill-tag" style="background: #fff; color: #000; font-size: 1.2rem; border: none;">
+                        📞 +91 97919 34072
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
